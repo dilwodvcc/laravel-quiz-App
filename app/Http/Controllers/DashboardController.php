@@ -8,26 +8,22 @@ class DashboardController extends Controller
 {
     public function home()
     {
-        return view('dashboard/home');
+        return view('dashboard.home');
     }
     public function myQuizzes()
     {
-        return view('dashboard/my-quizzes');
+        return view('dashboard.my-quizzes');
     }
     public function quizzes()
     {
-        return view('dashboard/quizzes');
-    }
-    public function createQuiz()
-    {
-        return view('dashboard/create-quiz');
+        return view('dashboard.quizzes');
     }
     public function updateQuiz()
     {
-        return view('dashboard/update-quiz');
+        return view('dashboard.update-quiz');
     }
     public function statistics()
     {
-        return view('dashboard/statistics');
+        return view('dashboard.statistics');
     }
 }

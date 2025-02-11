@@ -18,4 +18,8 @@ class HomeController extends Controller
     {
         return view('how-it-works');
     }
+    public function features()
+    {
+        return view('welcome');
+    }
 }

@@ -1,4 +1,5 @@
 <x-dashboard.header></x-dashboard.header>
+@vite('resources/js/add-quiz.js')
 <body class="bg-gray-100">
 <div class="flex min-h-screen">
     <!-- Sidebar -->
@@ -6,21 +7,7 @@
     <!-- Main Content -->
     <div class="flex-1">
         <!-- Top Navigation -->
-        <header class="bg-white shadow-sm">
-            <div class="h-16 flex items-center justify-between px-4">
-                <button class="md:hidden text-gray-600" onclick="document.getElementById('sidebar').classList.toggle('-translate-x-full')">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
-                <div class="flex items-center space-x-4">
-
-                    <div class="flex items-center space-x-2">
-                        <img src="https://via.placeholder.com/40" alt="Profile" class="w-10 h-10 rounded-full">
-                        <span class="text-gray-700 font-medium">John Doe</span>
-                    </div>
-                </div>
-            </div>
-        </header>
-
+        <x-dashboard.sidebar></x-dashboard.sidebar>
         <!-- Content -->
         <main class="p-6">
             <div class="min-h-screen bg-gray-100">
@@ -32,7 +19,8 @@
                     </div>
 
                     <!-- Main Form -->
-                    <form class="space-y-4" id="quizForm">
+                    <form class="space-y-4" id="quizForm" method="POST">
+                        @csrf
                         <!-- Quiz Details Section -->
                         <div class="bg-white p-6 rounded-lg shadow-md">
                             <h3 class="text-xl font-semibold text-gray-800 mb-4">Quiz Details</h3>

@@ -6,11 +6,11 @@
             </div>
             <div class="flex items-center space-x-4">
                 <div class=" md:flex items-center space-x-4">
-                    <a href="/about" class="text-gray-600 hover:text-gray-900">About</a>
-                    <a href="/features" class="text-gray-600 hover:text-gray-900">Features</a>
-                    <a href="/how-it-works" class="text-gray-600 hover:text-gray-900">How It Works</a>
-                    <a href="/login" class="text-gray-600 hover:text-gray-900">Login</a>
-                    <a href="/register"
+                    <a href="{{route("about")}}" class="text-gray-600 hover:text-gray-900">About</a>
+                    <a href="{{route("features")}}" class="text-gray-600 hover:text-gray-900">Features</a>
+                    <a href="{{route("how-it-works")}}" class="text-gray-600 hover:text-gray-900">How It Works</a>
+                    <a href="{{route("login")}}" class="text-gray-600 hover:text-gray-900">Login</a>
+                    <a href="{{route("register")}}"
                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
                         Register
                     </a>
@@ -19,10 +19,10 @@
         </div>
     </div>
     <div class=" mobile-menu md:hidden pl-3">
-        <a href="/features" class="block my-2 text-xl text-gray-600 hover:text-gray-900">Features</a>
-        <a href="/how-it-works" class="block my-2 text-xl text-gray-600 hover:text-gray-900">How It Works</a>
-        <a href="/login" class="block my-2 text-xl text-gray-600 hover:text-gray-900">Login</a>
-        <a href="/register"
+        <a href="{{route("features")}}" class="block my-2 text-xl text-gray-600 hover:text-gray-900">Features</a>
+        <a href="{{route("how-it-works")}}" class="block my-2 text-xl text-gray-600 hover:text-gray-900">How It Works</a>
+        <a href="{{route("login")}}" class="block my-2 text-xl text-gray-600 hover:text-gray-900">Login</a>
+        <a href="{{route("register")}}"
            class="block my-2 text-xl items-center px-4 py-2 border border-transparent font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
             Register
         </a>

@@ -8,15 +8,20 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
-Route::get('/how-it-works', [HomeController::class, 'howItWorks'])->name('howItWorks');
+Route::get('/how-it-works', [HomeController::class, 'howItWorks'])->name('how-it-works');
+Route::get('/features', [HomeController::class, 'features'])->name('features');
 
-Route::get('/take-quiz', [QuizController::class, 'takeQuiz'])->middleware('auth')->name('takeQuiz');
+Route::get('/take-quiz', [QuizController::class, 'takeQuiz'])->middleware('auth')->name('take-quiz');
 
-Route::get('/dashboard', [DashboardController::class,'home'])->name('home');
-Route::get('/my-quizzes'  , [DashboardController::class,'myQuizzes'])->name('quizzes');
-Route::get('/create-quiz',[DashboardController::class,'createQuiz'])->name('createQuiz');
-Route::get('/statistics',[DashboardController::class,'statistics'])->name('statistics');
-Route::get('/update-quiz',[DashboardController::class,'updateQuiz'])->name('updateQuiz');
+Route::prefix('dashboard')->middleware('auth')->group(function () {
+    Route::get('/', [DashboardController::class,'home'])->name('dashboard');
+    Route::get('/quizzes'  , [DashboardController::class,'myQuizzes'])->name('my-quizzes');
+    Route::get('/statistics',[DashboardController::class,'statistics'])->name('statistics');
+
+    Route::get('/create-quiz',[QuizController::class,'create'])->name('create-quiz');
+    Route::post('/create-quiz',[QuizController::class,'store'])->name('create-quiz');
+});
+
 
 //Route::get('/dashboard', function () {
 //    return view('dashboard');

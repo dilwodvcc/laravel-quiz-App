@@ -7,22 +7,7 @@
             <!-- Main Content -->
         <div class="flex-1">
             <!-- Top Navigation -->
-            <header class="bg-white shadow-sm">
-                <div class="h-16 flex items-center justify-between px-4">
-                    <button class="md:hidden text-gray-600"
-                            onclick="document.getElementById('sidebar').classList.toggle('-translate-x-full')">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                    <div class="flex items-center space-x-4">
-
-                        <div class="flex items-center space-x-2">
-                            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt61U1nKzE_CguMw0Xm5M7qMZ_2SHQS8cDOw&s" alt="Profile" class="w-10 h-10 rounded-full">
-                            <span class="text-gray-700 font-medium" id="userName"></span>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
+            <x-dashboard.sidebar></x-dashboard.sidebar>
             <!-- Content -->
             <main class="p-6">
                 <div class="min-h-screen bg-gray-100">
