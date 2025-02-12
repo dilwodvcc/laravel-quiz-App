@@ -1,4 +1,18 @@
 <x-dashboard.header></x-dashboard.header>
+<!-- toastr.js CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+    @if(session('success'))
+    toastr.success("{{ session('success') }}");
+    @endif
+
+    @if(session('error'))
+    toastr.error("{{ session('error') }}");
+    @endif
+</script>
+
 <body class="bg-gray-100">
 <div class="min-h-screen flex">
     <!-- Sidebar -->

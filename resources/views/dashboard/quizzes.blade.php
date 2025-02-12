@@ -1,4 +1,18 @@
 <x-dashboard.header></x-dashboard.header>
+<!-- toastr.js CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script>
+    @if(session('success'))
+    toastr.success("{{ session('success') }}");
+    @endif
+
+    @if(session('error'))
+    toastr.error("{{ session('error') }}");
+    @endif
+</script>
+
 <body class="bg-gray-100">
 <div class="flex min-h-screen">
     <!-- Sidebar -->
@@ -50,10 +64,11 @@
             <!-- Quiz Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Quiz Card 1 -->
+                @foreach($quizzes as $quiz)
                 <div class="bg-white rounded-lg shadow-sm p-6">
                     <div class="flex justify-between items-start mb-4">
                         <div>
-                            <h3 class="text-lg font-semibold">Basic Mathematics</h3>
+                            <h3 class="text-lg font-semibold">{{$quiz->title}}</h3>
                             <p class="text-gray-500 text-sm">Mathematics</p>
                         </div>
                         <div class="dropdown">
@@ -64,10 +79,10 @@
                             </button>
                         </div>
                     </div>
-                    <p class="text-gray-600 mb-4">Test basic arithmetic and algebraic concepts</p>
+                    <p class="text-gray-600 mb-4">{{$quiz->decription}}</p>
                     <div class="flex justify-between items-center mb-4">
-                        <span class="text-sm text-gray-500">10 Questions</span>
-                        <span class="text-sm text-gray-500">15 minutes</span>
+                        <span class="text-sm text-gray-500">{{$quiz->questions_count}} Questions</span>
+                        <span class="text-sm text-gray-500">{{$quiz->time_limit}} minutes</span>
                     </div>
                     <div class="mb-4">
                         <div class="w-full bg-gray-200 rounded-full h-2">
@@ -76,24 +91,34 @@
                         <span class="text-sm text-gray-500">75% Completion Rate</span>
                     </div>
                     <div class="flex justify-between">
-                        <button class="text-indigo-600 hover:text-indigo-800">Edit</button>
-                        <button class="text-green-600 hover:text-green-800">View Results</button>
-                        <button class="text-red-600 hover:text-red-800">Delete</button>
+                        <a href="{{ route('edit-quiz', $quiz->id) }}" class="text-indigo-600 hover:text-indigo-800">Edit</a>
+                        <a href="{{ route('results-quiz', $quiz->id) }}" class="text-green-600 hover:text-green-800">View Results</a>
+                        <button class="text-green-600 hover:text-green-100 rounded p-1 hover:bg-blue-500"
+                        onclick="share('{{$quiz->slug}}')"
+                        >Share</button>
+                        <form action="{{ route('destroy-quiz', $quiz->id) }}" method="POST" onsubmit="return confirm('Are you sure?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-600 hover:text-red-800">Delete</button>
+                        </form>
                     </div>
                 </div>
-
-                <!-- Quiz Card 2 -->
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <!-- Similar structure to Quiz Card 1 -->
-                </div>
-
-                <!-- Quiz Card 3 -->
-                <div class="bg-white rounded-lg shadow-sm p-6">
-                    <!-- Similar structure to Quiz Card 1 -->
-                </div>
+                @endforeach
             </div>
         </main>
     </div>
+    <script>
+        async function share(slug){
+            try{
+                slug = '{{env('APP_URL')}}' + '/take-quiz/' + slug;
+                await navigator.clipboard.writeText(slug);
+                alert('Content copied to clipboard');
+            }catch (err)
+            {
+                console.error('Failed to copy: ', err);
+            }
+        }
+    </script>
 </div>
 </body>
 </html>

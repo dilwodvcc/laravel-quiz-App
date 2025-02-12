@@ -1,5 +1,4 @@
 <x-dashboard.header></x-dashboard.header>
-@vite('resources/js/add-quiz.js')
 <!-- toastr.js CDN -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -14,6 +13,7 @@
     @endif
 </script>
 
+@vite('resources/js/add-quiz.js')
 <body class="bg-gray-100">
 <div class="flex min-h-screen">
     <!-- Sidebar -->
@@ -33,7 +33,7 @@
                     </div>
 
                     <!-- Main Form -->
-                    <form class="space-y-4" id="quizForm" method="POST">
+                    <form class="space-y-4" id="quizForm" method="POST" action="{{route('update-quiz', ['quiz'=>$quiz->id])}}">
                         @csrf
                         <!-- Quiz Details Section -->
                         <div class="bg-white p-6 rounded-lg shadow-md">
@@ -42,16 +42,18 @@
                                 <div>
                                     <label for="title" class="block text-sm font-medium text-gray-700">Quiz Title</label>
                                     <input type="text" id="title" name="title" placeholder="Quiz Title" required
+                                           value="{{$quiz->title}}"
                                            class="w-full px-4 py-2 border rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                 </div>
                                 <div>
                                     <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
                                     <textarea id="description" name="description" rows="3" placeholder="Description" required
-                                              class="w-full px-4 py-2 border rounded-lg mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                                              class="w-full px-4 py-2 border rounded-lg mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">{{$quiz->description}}</textarea>
                                 </div>
                                 <div>
                                     <label for="timeLimit" class="block text-sm font-medium text-gray-700">Time Limit (minutes)</label>
                                     <input type="number" id="timeLimit" name="timeLimit" placeholder="Time Limit" min="1" required
+                                           value="{{$quiz->time_limit}}"
                                            class="px-4 py-2 border rounded-lg mt-1 block w-48 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                 </div>
                             </div>
@@ -68,47 +70,55 @@
 
                             <!-- Question Template -->
                             <div id="questionsContainer" class="space-y-6">
-                                <div class="p-4 border border-gray-200 rounded-lg" data-question-id="1">
-                                    <div>
-                                        <h3>1</h3>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label class="block text-sm font-medium text-gray-700">Question Text</label>
-                                        <input name="questions[0][quiz]" type="text" required
-                                               class="w-full px-4 py-2 border rounded-lg mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                    </div>
+                                @foreach ($quiz->questions as $index => $question)
+                                    <div class="p-4 border border-gray-200 rounded-lg" data-question-id="{{ $index }}">
+                                        <div>
+                                            <h3>{{ $index + 1 }}</h3>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="block text-sm font-medium text-gray-700">Question Text</label>
+                                            <input name="questions[{{ $index }}][quiz]" type="text" required
+                                                   value="{{ $question->name }}"
+                                                   class="w-full px-4 py-2 border rounded-lg mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        </div>
 
-                                    <div class="space-y-3" data-options-container>
-                                        <div class="flex justify-between">
-                                            <p class="text-sm font-medium text-gray-700">Answer Options</p>
-                                            <button type="button" class="addOptionBtn px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
-                                                Add Option
+                                        <div class="space-y-3" data-options-container>
+                                            <div class="flex justify-between">
+                                                <p class="text-sm font-medium text-gray-700">Answer Options</p>
+                                                <button type="button" class="addOptionBtn px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
+                                                    Add Option
+                                                </button>
+                                            </div>
+                                        @foreach ($question->options as $optionIndex => $option)
+
+                                                <div class="flex items-center gap-4">
+                                                    <input type="radio" name="questions[{{ $index }}][correct]" value="{{ $optionIndex }}"
+                                                           class="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                                                           @if ($question->correct_option == $optionIndex) checked @endif>
+                                                    <input type="text" name="questions[{{ $index }}][options][]" placeholder="Option {{ $optionIndex + 1 }}" required
+                                                           value="{{ $option->name}}"
+                                                           class="w-full px-4 py-2 border rounded-lg block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                                    <button type="button" class="removeOptionBtn px-2 py-1 text-red-600 hover:text-red-800">×</button>
+                                                </div>
+                                            @endforeach
+                                        </div>
+
+                                        <div class="mt-4 flex justify-end">
+                                            <button type="button" class="removeQuestionBtn text-red-600 hover:text-red-800 font-medium">
+                                                Remove Question
                                             </button>
                                         </div>
-                                        <!-- Option 1 -->
-                                        <div class="flex items-center gap-4">
-                                            <input type="radio" name="questions[0][correct]" value="0" class="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500">
-                                            <input type="text" name="questions[0][options][]" placeholder="Option 1" required
-                                                   class="w-full px-4 py-2 border rounded-lg block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                            <button type="button" class="removeOptionBtn px-2 py-1 text-red-600 hover:text-red-800">×</button>
-                                        </div>
-                                        <!-- Option 2 -->
                                     </div>
-
-                                    <div class="mt-4 flex justify-end">
-                                        <button type="button" class="removeQuestionBtn text-red-600 hover:text-red-800 font-medium">
-                                            Remove Question
-                                        </button>
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
+
                         </div>
 
                         <!-- Submit Button -->
                         <div class="flex justify-end">
                             <button type="submit"
                                     class="px-6 py-3 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                                Create Quiz
+                                Update Quiz
                             </button>
                         </div>
                     </form>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Quiz;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class QuizController extends Controller
 {
@@ -12,7 +13,7 @@ class QuizController extends Controller
      */
     public function index()
     {
-        //
+        return view('dashboard.quizzes', ['quizzes' => Quiz::withCount('questions')->get()]);
     }
 
     /**
@@ -34,49 +35,86 @@ class QuizController extends Controller
             'timeLimit' => 'required|integer',
             'questions' => 'required|array',
         ]);
-
         $quiz = Quiz::create([
             'user_id' => auth()->id(),
-            'title'=>$validator['title'],
-            'description'=>$validator['description'],
-            'timeLimit'=>$validator['timeLimit'],
-
+            'title' => $validator['title'],
+            'description' => $validator['description'],
+            'time_limit' => $validator['timeLimit'] ?? 30,
+            'slug' => Str::slug(strtotime('now') . '/' . $request['title'])
         ]);
 
         foreach ($validator['questions'] as $question) {
-            $quiz->questions()->create();
+            $questionItem = $quiz->questions()->create([
+                'name' => $question['quiz'],
+            ]);
+            foreach ($question['options'] as $optionKey => $option) {
+                $questionItem->options()->create([
+                    'name' => $option,
+                    'is_correct' => $question['correct'] == $optionKey ? 1 : 0,
+                ]);
+            }
         }
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        return to_route('my-quizzes')->with('success', 'Quiz created successfully!');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $quiz = Quiz::with('questions.options')->findOrFail($id);
+        return view('dashboard.edit-quiz', compact('quiz'));
     }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Quiz $quiz)
     {
-        //
+        $validator = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'timeLimit' => 'required|integer',
+            'questions' => 'required|array'
+        ]);
+
+        $quiz->update([
+            'title' => $validator['title'],
+            'description' => $validator['description'],
+            'timeLimit' => $validator['timeLimit'],
+            'slug' => Str::slug(strtotime('now') . '/' . $request['title'])
+        ]);
+
+        $quiz->questions()->delete();
+
+        foreach ($validator['questions'] as $question) {
+            $questionItem = $quiz->questions()->create([
+                'name' => $question['quiz'],
+            ]);
+            foreach ($question['option'] as $optionKey => $option) {
+                $questionItem->options()->create([
+                    'name' => $option,
+                    'is_correct' => $question['correct'] == $optionKey ? 1 : 0,
+                ]);
+            }
+        }
+
+        return to_route('my-quizzes')->with('success', 'Quiz updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Quiz $quiz)
     {
-        //
+        $quiz->delete();
+        return redirect()->route('my-quizzes')->with('success', 'Quiz deleted successfully!');
+    }
+
+    public function results(Quiz $quiz)
+    {
+        return view('dashboard.results', compact('quiz'));
     }
 }

@@ -10,4 +10,13 @@ class Question extends Model
         'quiz_id',
         'name'
     ];
+    public function quiz()
+    {
+        return $this->belongsTo(Quiz::class);
+    }
+
+    public function options()
+    {
+        return $this->hasMany(Option::class);
+    }
 }
