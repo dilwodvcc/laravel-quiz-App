@@ -11,8 +11,6 @@ Route::get('/about', [HomeController::class, 'about'])->name('about');
 Route::get('/how-it-works', [HomeController::class, 'howItWorks'])->name('how-it-works');
 Route::get('/features', [HomeController::class, 'features'])->name('features');
 
-Route::get('/take-quiz', [QuizController::class, 'takeQuiz'])->middleware('auth')->name('take-quiz');
-
 Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class,'home'])->name('dashboard');
     Route::get('/quizzes'  , [QuizController::class,'index'])->name('my-quizzes');
@@ -28,6 +26,7 @@ Route::prefix('dashboard')->middleware('auth')->group(function () {
     Route::post('/create-quiz',[QuizController::class,'store'])->name('store-quiz');
 });
 
+Route::get('/take-quiz/{slug}' , [QuizController::class, 'takeQuiz'])->name('take-quiz');
 
 //Route::get('/dashboard', function () {
 //    return view('dashboard');

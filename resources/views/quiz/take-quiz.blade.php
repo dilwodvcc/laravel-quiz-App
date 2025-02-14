@@ -1,4 +1,4 @@
-<x-header></x-header>
+<x-main.header></x-main.header>
 <body class="flex flex-col min-h-screen bg-gray-100">
 <!-- Navigation -->
 <nav class="bg-white shadow-lg">
@@ -21,7 +21,31 @@
 
 <!-- Main Content -->
 <main class="flex-grow container mx-auto px-4 py-8">
-    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6" id="questionContainer">
+    <div id="start-card" class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6">
+        <div class="text-center">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4" id="title">Quiz Title</h2>
+            <p class="text-xl text-gray-700 mb-6" id="description">Lorem ipsum dolor sit amet, consectetur
+                adipisicing elit.
+                Accusamus delectus dolorum eligendi esse excepturi in quam qui veritatis voluptatibus?
+                Dolore.</p>
+
+            <div class="flex justify-center space-x-12 mb-8">
+                <div class="text-center">
+                    <!--                            <p class="text-3xl font-bold text-blue-600" id="final-score">0/10</p>-->
+                </div>
+                <div class="text-center">
+                    <p class="text-3xl font-bold text-blue-600" id="time-taken">5:00</p>
+                    <p class="text-gray-600">Time Limit</p>
+                </div>
+            </div>
+
+            <button id="startBtn"
+                    class="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                Start Quiz
+            </button>
+        </div>
+    </div>
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 hidden" id="questionContainer">
         <!-- Quiz Header -->
         <div class="flex justify-between items-center mb-6">
             <div>
@@ -119,6 +143,13 @@
 
 <!-- Quiz JavaScript -->
 <script>
+    //start Btn
+    let startBtn = document.getElementById('startBtn');
+    startBtn.onclick = () => {
+        document.getElementById('start-card').classList.add('hidden')
+        document.getElementById('questionContainer').classList.remove('hidden')
+
+    }
     // Timer functionality
     function startTimer(duration, display) {
         let timer = duration;
@@ -135,74 +166,7 @@
 
     // Initialize quiz
     let options = document.getElementById('options'),
-        questions = [
-            {
-                'id':1,
-                'question': 'What is the output of console.log(typeof undefined)?',
-                'options': [
-                    {
-                        'id':1,
-                        'option_text':'undefined'
-                    },
-                    {
-                        'id':2,
-                        'option_text':'object'
-                    },
-                    {
-                        'id':3,
-                        'option_text':'string'
-                    },
-                    {
-                        'id':4,
-                        'option_text':'null'
-                    }
-                ],
-            },
-            {
-                'id':2,
-                'question': 'What is the output of console.log(typeof null)?',
-                'options': [
-                    {
-                        'id':1,
-                        'option_text':'undefined'
-                    },
-                    {
-                        'id':2,
-                        'option_text':'object'
-                    },
-                    {
-                        'id':3,
-                        'option_text':'string'
-                    },
-                    {
-                        'id':4,
-                        'option_text':'null'
-                    }
-                ],
-            },
-            {
-                'id':3,
-                'question': 'What is the output of console.log(typeof {})?',
-                'options': [
-                    {
-                        'id':1,
-                        'option_text':'undefined'
-                    },
-                    {
-                        'id':2,
-                        'option_text':'object'
-                    },
-                    {
-                        'id':3,
-                        'option_text':'string'
-                    },
-                    {
-                        'id':4,
-                        'option_text':'null'
-                    }
-                ],
-            }
-        ],
+        questions =   JSON.parse(`<?php echo $quiz->toJson() ?>`).questions,
         currentQuestionIndex = 0;
 
     function takeQuiz(index=0) {
