@@ -1,38 +1,24 @@
 <x-dashboard.header></x-dashboard.header>
-<!-- toastr.js CDN -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-<script>
-    @if(session('success'))
-    toastr.success("{{ session('success') }}");
-    @endif
-
-    @if(session('error'))
-    toastr.error("{{ session('error') }}");
-    @endif
-</script>
-
 <body class="bg-gray-100">
 <div class="min-h-screen flex">
     <!-- Sidebar -->
-    <x-dashboard.navbar></x-dashboard.navbar>
-
+        <x-dashboard.navbar></x-dashboard.navbar>
     <!-- Main Content -->
     <div class="flex-1 flex flex-col">
         <!-- Top Navigation -->
-        <x-dashboard.sidebar></x-dashboard.sidebar>
+    <x-dashboard.sidebar></x-dashboard.sidebar>
+
         <!-- Main Content Area -->
         <main class="flex-1 p-4 md:p-6">
             <!-- Quick Actions -->
             <div class="mb-8">
                 <div class="flex flex-wrap gap-4">
-                    <a href="{{route("create-quiz")}}" class="flex-1 min-w-[200px] bg-blue-600 text-white p-4 rounded-lg shadow hover:bg-blue-700 transition">
+                    <a href="{{ route('create-quiz') }}" class="flex-1 min-w-[200px] bg-blue-600 text-white p-4 rounded-lg shadow hover:bg-blue-700 transition">
                         <i class="fas fa-plus mb-2 text-2xl"></i>
                         <h3 class="font-semibold">Create New Quiz</h3>
                         <p class="text-sm opacity-90">Start creating a new quiz</p>
                     </a>
-                    <a href="{{route("statistics")}}" class="flex-1 min-w-[200px] bg-green-600 text-white p-4 rounded-lg shadow hover:bg-green-700 transition">
+                    <a href="{{ route('statistics') }}" class="flex-1 min-w-[200px] bg-green-600 text-white p-4 rounded-lg shadow hover:bg-green-700 transition">
                         <i class="fas fa-chart-line mb-2 text-2xl"></i>
                         <h3 class="font-semibold">View Statistics</h3>
                         <p class="text-sm opacity-90">Check your progress</p>

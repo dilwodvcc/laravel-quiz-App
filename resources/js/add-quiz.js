@@ -81,6 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return div;
     }
 
+
     function createOptionElement(questionNum, optionNum) {
         const div = document.createElement('div');
         div.className = 'flex items-center gap-4';
@@ -146,3 +147,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+

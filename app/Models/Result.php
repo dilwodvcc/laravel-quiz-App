@@ -10,6 +10,13 @@ class Result extends Model
         'user_id',
         'quiz_id',
         'started_at',
-        'finished_at',
+        'finished_at'
     ];
+    public $timestamps = false;
+
+    public function quiz(){
+        return $this->belongsTo(Quiz::class);
+    }
+
+
 }

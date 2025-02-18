@@ -6,14 +6,14 @@
         <div class="flex justify-between">
             <div class="flex space-x-7">
                 <div>
-                    <a href="/" class="flex items-center py-4 px-2">
+                    <a href="index.html" class="flex items-center py-4 px-2">
                         <span class="font-semibold text-gray-500 text-lg">Quiz Platform</span>
                     </a>
                 </div>
             </div>
             <div class="flex items-center space-x-3">
-                <a href="/dashboard" class="py-2 px-4 text-gray-500 hover:text-gray-700">Dashboard</a>
-                <a href="/profile" class="py-2 px-4 text-gray-500 hover:text-gray-700">Profile</a>
+                <a href="dashboard.html" class="py-2 px-4 text-gray-500 hover:text-gray-700">Dashboard</a>
+                <a href="profile.html" class="py-2 px-4 text-gray-500 hover:text-gray-700">Profile</a>
             </div>
         </div>
     </div>
@@ -22,7 +22,7 @@
 <!-- Main Content -->
 <main class="flex-grow container mx-auto px-4 py-8">
     <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6" id="questionContainer">
-        <form action="{{route('take-quiz',['slug' => $quiz->slug])}}" method="POST">
+        <form method="POST" action="{{ route('take-quiz', ['slug'=>$quiz->slug]) }}">
             @csrf
             <!-- Quiz Header -->
             <div class="flex justify-between items-center mb-6">
@@ -31,7 +31,7 @@
                     <p class="text-gray-600 mt-2">{{ $quiz->description }}</p>
                 </div>
                 <div class="text-right">
-                    <div class="text-xl font-bold text-blue-600" id="timer">{{ $quiz->time_limit}}</div>
+                    <div class="text-xl font-bold text-blue-600" id="timer">{{ $quiz->time_limit }}</div>
                     <div class="text-sm text-gray-500">Time Remaining</div>
                 </div>
             </div>
@@ -55,9 +55,9 @@
 
                 <!-- Options -->
                 <div class="space-y-3" id="options">
+
                 </div>
             </div>
-
 
             <!-- Navigation Buttons -->
             <div class="flex justify-between items-center">
@@ -77,42 +77,18 @@
             </div>
         </form>
     </div>
-
-    <!-- Results Card -->
-    <div id="results-card" class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-6 hidden">
-        <div class="text-center">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">Quiz Complete!</h2>
-            <h3 class="text-xl text-gray-700 mb-6">JavaScript Fundamentals Quiz</h3>
-
-            <div class="flex justify-center space-x-12 mb-8">
-                <div class="text-center">
-                    <p class="text-3xl font-bold text-blue-600" id="final-score">0/10</p>
-                    <p class="text-gray-600">Final Score</p>
-                </div>
-                <div class="text-center">
-                    <p class="text-3xl font-bold text-blue-600" id="time-taken">0:00</p>
-                    <p class="text-gray-600">Time Taken</p>
-                </div>
-            </div>
-
-            <a href="/dashboard" class="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                Return to Dashboard
-            </a>
-        </div>
-    </div>
 </main>
 <!-- Footer -->
-<x-main.footer></x-main.footer>
+<footer class="bg-white shadow-lg mt-8">
+    <div class="max-w-6xl mx-auto px-4 py-4">
+        <div class="text-center text-gray-500 text-sm">
+            © 2024 Quiz Platform. All rights reserved.
+        </div>
+    </div>
+    {{$questions}}
+</footer>
 <!-- Quiz JavaScript -->
 <script>
-    //start Btn
-    let startBtn = document.getElementById('startBtn');
-    startBtn.onclick = () => {
-        document.getElementById('start-card').classList.add('hidden')
-        document.getElementById('questionContainer').classList.remove('hidden')
-
-    }
-    // Timer functionality
     function startTimer(duration, display) {
         let timer = duration;
         setInterval(() => {
@@ -128,9 +104,8 @@
 
     // Initialize quiz
     let options = document.getElementById('options'),
-        questions =   JSON.parse(`<?php echo $questions->toJson() ?>`),
+        questions = JSON.parse(`<?php echo $questions->toJson() ?>`),
         currentQuestionIndex = 0;
-
 
     function getQuestion(index=0) {
         return questions[index];
@@ -138,13 +113,10 @@
     function displayQuestion(question) {
         let questionElement = document.getElementById('question'),
             optionsElement = document.getElementById('options');
-
-        questionElement.textContent = question.name;
+        questionElement.innerText = question.name;
         optionsElement.innerHTML = '';
-
-        question.options.forEach((option) => {
-            optionsElement.innerHTML += `
-                <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+        question.options.forEach((option)=>{
+            optionsElement.innerHTML += `<label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
                     <input type="radio" name="answer" class="h-4 w-4 text-blue-600" value="${option.id}">
                     <span class="ml-3">${option.name}</span>
                 </label>`;
@@ -155,13 +127,12 @@
         displayQuestion(currentQuestion)
         const timerDisplay = document.getElementById('timer');
         startTimer(1200, timerDisplay); // 20 minutes
-
         // Add event listeners for navigation buttons
         document.getElementById('next-btn').addEventListener('click', () => {
             currentQuestionIndex++;
             let question = getQuestion(currentQuestionIndex);
             if (question) {
-                displayQuestion(question)
+                displayQuestion(question);
             } else {
                 currentQuestionIndex--;
                 alert('Quiz completed');
@@ -172,13 +143,12 @@
             currentQuestionIndex--;
             let question = getQuestion(currentQuestionIndex);
             if (question) {
-                displayQuestion(question)
+                displayQuestion(question);
             } else {
                 currentQuestionIndex++;
                 alert('You are at the first question');
             }
         });
-
     });
 </script>
-
+<x-main.footer></x-main.footer>

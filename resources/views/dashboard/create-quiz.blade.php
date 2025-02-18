@@ -1,27 +1,15 @@
 <x-dashboard.header></x-dashboard.header>
 @vite('resources/js/add-quiz.js')
-<!-- toastr.js CDN -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-<script>
-    @if(session('success'))
-    toastr.success("{{ session('success') }}");
-    @endif
-
-    @if(session('error'))
-    toastr.error("{{ session('error') }}");
-    @endif
-</script>
-
 <body class="bg-gray-100">
 <div class="flex min-h-screen">
     <!-- Sidebar -->
-    <x-dashboard.navbar></x-dashboard.navbar>
+        <x-dashboard.navbar></x-dashboard.navbar>
+
     <!-- Main Content -->
     <div class="flex-1">
         <!-- Top Navigation -->
-        <x-dashboard.sidebar></x-dashboard.sidebar>
+    <x-dashboard.sidebar></x-dashboard.sidebar>
+
         <!-- Content -->
         <main class="p-6">
             <div class="min-h-screen bg-gray-100">
@@ -65,6 +53,7 @@
                                     Add Question
                                 </button>
                             </div>
+
 
                             <!-- Question Template -->
                             <div id="questionsContainer" class="space-y-6">
@@ -117,5 +106,4 @@
         </main>
     </div>
 </div>
-</body>
-</html>
+
